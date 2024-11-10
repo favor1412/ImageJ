@@ -77,6 +77,8 @@ public class Roi extends Object implements Cloneable, java.io.Serializable, Iter
 	private static int defaultGroup; // zero is no specific group
 	private static Color groupColor;
 	private static double defaultStrokeWidth;
+	private static float defaultMinStrokeWidth = 0.05f;
+	private float minStrokeWidth = defaultMinStrokeWidth;
 	private static String groupNamesString = Prefs.get(NAMES_KEY, null);
 	private static String[] groupNames;
 	private static boolean groupNamesChanged;
@@ -1606,7 +1608,7 @@ public class Roi extends Object implements Cloneable, java.io.Serializable, Iter
 		state = NORMAL;
 		if (imp==null) return;
 		imp.draw(clipX-5, clipY-5, clipWidth+10, clipHeight+10);
-		if (Recorder.record) {
+		if (IJ.recording()) {
 			String method;
 			if (type==OVAL)
 				Recorder.record("makeOval", x, y, width, height);
@@ -2065,6 +2067,7 @@ public class Roi extends Object implements Cloneable, java.io.Serializable, Iter
 	 * @see #setUnscalableStrokeWidth(double)	 
 	 * @see #setStrokeColor(Color)
 	 * @see ij.ImagePlus#setOverlay(ij.gui.Overlay)
+	 * @see setMineStrokeWidth(double)
 	 */
 	public void setStrokeWidth(float strokeWidth) {
 		if (strokeWidth<0f)
@@ -2089,6 +2092,11 @@ public class Roi extends Object implements Cloneable, java.io.Serializable, Iter
 	/** This is a version of setStrokeWidth() that accepts a double argument. */
 	public void setStrokeWidth(double strokeWidth) {
 		setStrokeWidth((float)strokeWidth);
+	}
+
+	/** Sets the minimum scaled stroke width (default=0.05). */
+	public void setMinStrokeWidth(double minWidth) {
+		minStrokeWidth = (float)minWidth;
 	}
 
 	/** Sets the width of the line used to draw this ROI and
@@ -2132,7 +2140,8 @@ public class Roi extends Object implements Cloneable, java.io.Serializable, Iter
 		double mag = ic.getMagnification();
 		if (mag!=1.0) {
 			float width = (float)(stroke.getLineWidth()*mag);
-			//return new BasicStroke(width, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL);
+			if (width<minStrokeWidth)
+				width = minStrokeWidth;
 			return new BasicStroke(width, stroke.getEndCap(), stroke.getLineJoin(), stroke.getMiterLimit(), stroke.getDashArray(), stroke.getDashPhase());
 		} else
 			return stroke;
