@@ -10,7 +10,6 @@ import java.awt.image.*;
 import java.awt.event.*;
 import java.util.*;
 import java.io.*;
-import java.applet.Applet;
 import java.awt.event.*;
 import java.util.zip.*;
 
@@ -53,7 +52,7 @@ public class Menus {
 	private static PopupMenu popup;
 
 	private static ImageJ ij;
-	private static Applet applet;
+	private static Object applet = null;
 	private Hashtable demoImagesTable = new Hashtable();
 	private static String ImageJPath, pluginsPath, macrosPath;
 	private static Properties menus;
@@ -85,7 +84,7 @@ public class Menus {
 	static boolean jnlp; // true when using Java WebStart
 	public static int setMenuBarCount;
 		
-	Menus(ImageJ ijInstance, Applet appletInstance) {
+	Menus(ImageJ ijInstance, Object appletInstance) {
 		ij = ijInstance;
 		String title = ij!=null?ij.getTitle():null;
 		applet = appletInstance;
@@ -1018,7 +1017,7 @@ public class Menus {
 					ijDir = ijDir + File.separator + "ImageJ";
 				// needed to run plugins when ImageJ launched using Java WebStart
 				if (applet==null)
-					System.setSecurityManager(null);
+					// System.setSecurityManager(null);
 				jnlp = true;
 			}
 			pluginsPath = ijDir+File.separator+"plugins"+File.separator;
