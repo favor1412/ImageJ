@@ -13,11 +13,12 @@ import ij.macro.MacroRunner;
 import ij.measure.Calibration;
 import ij.measure.ResultsTable;
 import ij.measure.Measurements;
+
 import java.awt.event.*;
 import java.text.*;
 import java.util.*;	
-import java.awt.*;	
-import java.applet.Applet;
+import java.awt.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.net.*;
@@ -59,7 +60,7 @@ public class IJ {
     public static final char degreeSymbol = '\u00B0';
 
 	private static ImageJ ij;
-	private static java.applet.Applet applet;
+	private static Object applet = null;
 	private static ProgressBar progressBar;
 	private static TextPanel textPanel;
 	private static String osname, osarch;
@@ -124,7 +125,7 @@ public class IJ {
 		df[0].setRoundingMode(RoundingMode.HALF_UP);
 	}
 			
-	static void init(ImageJ imagej, Applet theApplet) {
+	static void init(ImageJ imagej, Object theApplet) {
 		ij = imagej;
 		applet = theApplet;
 		progressBar = ij.getProgressBar();
@@ -442,7 +443,7 @@ public class IJ {
 	}
 
 	/**Returns the Applet that created this ImageJ or null if running as an application.*/
-	public static java.applet.Applet getApplet() {
+	public static Object getApplet() {
 		return applet;
 	}
 	

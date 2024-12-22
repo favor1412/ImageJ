@@ -2,10 +2,8 @@ package ij;
 import ij.util.Java2;
 import java.io.*;
 import java.util.*;
-import java.applet.*;
 import java.net.URL;
 import java.awt.*;
-import java.applet.Applet;
 import ij.io.*;
 import ij.util.Tools;
 import ij.gui.*;
@@ -300,7 +298,7 @@ public class Prefs {
 	 * and the preferences file ("IJ_Prefs.txt").
 	 * @return	an error message if "IJ_Props.txt" not found.
 	*/
-	public static String load(Object ij, Applet applet) {
+	public static String load(Object ij, Object applet) {
 		if (ImageJDir==null)
 			ImageJDir = System.getProperty("user.dir");
 		if (ij!=null) {
@@ -345,7 +343,7 @@ public class Prefs {
 	}
 	*/
 
-	static String loadAppletProps(InputStream f, Applet applet) {
+	static String loadAppletProps(InputStream f, Object applet) {
 		if (f==null)
 			return PROPS_NAME+" not found in ij.jar";
 		try {
@@ -354,7 +352,7 @@ public class Prefs {
 		}
 		catch (IOException e) {return("Error loading "+PROPS_NAME);}
 		try {
-			URL url = new URL(applet.getDocumentBase(), "images/");
+			URL url = new URL("images/");
 			imagesURL = url.toString();
 		}
 		catch (Exception e) {}
